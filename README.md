@@ -13,6 +13,8 @@ PySide -> binding pro Qt
 
 **Ativar ambiente virtual:**
 
+~$ virtual env .
+
 ~$ source bin/activate
 
 **Instalar as dependencias:**
@@ -33,9 +35,12 @@ PySide -> binding pro Qt
 
 'd' -> move para a direita
 
-<!-- # Objetivo do jogo:
+# Objetivo do jogo:
 
-Coletar pontos que vão aparecer aleatoriamente na tela, tomando cuidado com o tempo, que está diminuindo.
+Coletar pontos que vão aparecer aleatoriamente na tela, tomando cuidado com o tempo que está diminuindo.
+
 Quando o tempo acabar, você perde.
 
-Se você -->
+Se você colidir com você mesmo, você perde.
+
+Se você colidir com a parede, você perde.
