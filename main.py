@@ -38,13 +38,7 @@ h_object_size: float = object_size/view_height
 
 score: int = 0
 
-
-def check_collision(
-    snake_x: float,
-    snake_y: float,
-    objects: List[dict]
-):
-    # check if snake hit any obj in objects
+def check_collision(snake_x, snake_y, objects):
     for obj in objects:
         obj_x: Optional[float] = obj.get('x')
         obj_y: Optional[float] = obj.get('y')
@@ -59,17 +53,11 @@ def check_collision(
             return obj
     return None
 
-
 def draw_apples():
     for apple in apples:
         glVertex2f(apple.get('x'), apple.get('y'))
 
-
-def draw_snake():
-    global will_snake_extend, timeout, score
-
-    def move_snake(x: float, y: float):
-        # move snake in current direction
+def move_snake(x: float, y: float):
         if (snake_dir == 'w'):
             y += snake_move
         elif (snake_dir == 's'):
@@ -79,8 +67,10 @@ def draw_snake():
         elif (snake_dir == 'd'):
             x += snake_move
         return [x, y]
+    
+def draw_snake():
+    global will_snake_extend, timeout, score
 
-    # create new head
     sn_x: Optional[float] = snake[-1].get('x')
     sn_y: Optional[float] = snake[-1].get('y')
     if (isinstance(sn_x, float) and isinstance(sn_y, float)):
@@ -91,7 +81,6 @@ def draw_snake():
     x, y = move_snake(x, y)
     snake.append({'x': x, 'y': y})
 
-    # check whetever new head collide with some apple
     collided_apple = check_collision(x, y, apples)
     score_label.setText("Quantidade de pontos: " + str(score))
     if (collided_apple is not None):
@@ -99,14 +88,12 @@ def draw_snake():
         apples.remove(collided_apple)
         score += 1
 
-    # if snake didn't eat apple remove tail
     if (not will_snake_extend):
         del snake[0]
     else:
         timeout += random.randint(timeout_min, timeout_max)
         will_snake_extend = False
 
-    # redraw snake body
     for snake_body in snake:
         sn_x = snake_body.get('x')
         sn_y = snake_body.get('y')
