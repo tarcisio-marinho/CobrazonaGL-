@@ -1,0 +1,1 @@
+{'tarcisio': 3, 'joao': 9, 'kleber': 5, 'pele': 10}

@@ -12,31 +12,35 @@ from typing import *
 
 config = configparser.ConfigParser()
 config.read('config.txt')
+with open('scores.txt', 'r') as f:
+    arr = eval(f.read())
 
-view_width: int = int(config['display']['width'])
-view_height: int = int(config['display']['height'])
-game_speed: int = int(config['game']['speed'])
-timeout_min: int = int(config['game']['timeout_min'])
-timeout_max: int = int(config['game']['timeout_max'])
-timeout: int = int(config['game']['timeout'])  
-object_size: int = int(config['objects']['object_size'])
-snake_move: float = float(config['objects']['snake_move'])
-min_apples_rate: int = int(config['objects']['apples_rate_min'])
-max_apples_rate: int = int(config['objects']['apples_rate_max'])
-apples_rate: List = [min_apples_rate, max_apples_rate]
-apples_limit: int = int(config['objects']['apples_limit'])
+top_players = {k: v for k, v in sorted(arr.items(), key=lambda item: item[1], reverse=True)}
+print(top_players)
+view_width = int(config['display']['width'])
+view_height = int(config['display']['height'])
+game_speed = int(config['game']['speed'])
+timeout_min = int(config['game']['timeout_min'])
+timeout_max = int(config['game']['timeout_max'])
+timeout = int(config['game']['timeout'])  
+object_size = int(config['objects']['object_size'])
+snake_move = float(config['objects']['snake_move'])
+min_apples_rate = int(config['objects']['apples_rate_min'])
+max_apples_rate = int(config['objects']['apples_rate_max'])
+apples_rate = [min_apples_rate, max_apples_rate]
+apples_limit = int(config['objects']['apples_limit'])
 
-apples: List[Dict[str, float]] = list()
-apples_counter: int = random.randint(*apples_rate)
+apples = list()
+apples_counter = random.randint(*apples_rate)
 
-snake: List[Dict[str, float]] = [{'x': 0.0, 'y': 0.0}] 
-snake_dir: str = random.choice(['w', 's', 'd', 'a'])  
-will_snake_extend: bool = False
+snake = [{'x': 0.0, 'y': 0.0}] 
+snake_dir = random.choice(['w', 's', 'd', 'a'])  
+will_snake_extend = False
 
-w_object_size: float = object_size/view_width
-h_object_size: float = object_size/view_height
+w_object_size = object_size/view_width
+h_object_size = object_size/view_height
 
-score: int = 0
+score = 0
 
 class GameWidget(QOpenGLWidget):
     def initializeGL(self):
@@ -171,6 +175,10 @@ def draw_snake():
         glVertex2f(x, y)
 
 def game_over(msg):
+    global score
+    local_score = score
+    new_msg = "Seu score foi de: {0}".format(str(score))
+    
     print(msg)
     msg = QMessageBox()
     msg.setIcon(QMessageBox.Warning)
