@@ -3,7 +3,7 @@ import time
 import random
 import os
 import configparser
-from PySide2.QtWidgets import QApplication,QWidget,QVBoxLayout,QLabel,QPushButton,QMainWindow,QOpenGLWidget,QHBoxLayout
+from PySide2.QtWidgets import QHBoxLayout, QWidget, QApplication, QVBoxLayout,  QPushButton, QLabel, QMainWindow, QOpenGLWidget
 from PySide2.QtCore import *
 from PySide2.QtGui import *
 from OpenGL.GL import *
@@ -37,7 +37,7 @@ apples: List[Dict[str, float]] = list()
 apples_counter: int = random.randint(*apples_rate)
 
 snake: List[Dict[str, float]] = [{'x': 0.0, 'y': 0.0}]  # body of snake
-snake_dir: str = 'd'  # direction of snake movement
+snake_dir: str = random.choice(['w', 's', 'd', 'a'])  
 will_snake_extend: bool = False
 
 w_object_size: float = object_size/view_width
