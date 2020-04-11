@@ -1,1 +1,1 @@
-{'tarcisio': 3, 'joao': 9, 'kleber': 5, 'pele': 10}
+[{'name': 'pele', 'score': 10}, {'name': 'buzu', 'score': 11}, {'name': 'tarcisio', 'score': 66}]

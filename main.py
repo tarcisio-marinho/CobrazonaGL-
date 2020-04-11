@@ -8,31 +8,20 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from OpenGL.GL import *
 from typing import *
+import json, pickle
 
 
 config = configparser.ConfigParser()
 try:
     config.read('config.txt')
     with open('scores.txt', 'r') as f:
-        arr = eval(f.read())
+        top_players = eval(f.read())
 except:
     print("scores or configuration file was not found")
     exit()
 
-top_players = [{"name": k, "score": v} for k, v in sorted(arr.items(), key=lambda item: item[1], reverse=True)]
-top_scores = list()
+player_name = input("Digite o nome do jogador: ")
 
-for player in top_players:
-    top_scores.append(player["score"])
-
-print(top_scores)
-
-# def is_top_score(score):
-#     for s in top_scores:
-#         if(score > s):
-            
-
-print(top_players)
 view_width = int(config['display']['width'])
 view_height = int(config['display']['height'])
 game_speed = int(config['game']['speed'])
@@ -190,21 +179,37 @@ def draw_snake():
 
         glVertex2f(x, y)
 
+def insert_score(name, score):
+    global top_players
+    top_players.append({"name":name, "score":score})            
+    with open('scores.txt', 'w') as f:
+        f.write(str(top_players))
+
+def print_top_10_scores():
+    global top_players
+    ordered = sorted(top_players, key=lambda item: item['score'], reverse=True)
+    for i, player in enumerate(ordered):
+        print('{0} -> {1} pontuação: {2}'.format(i+1, player["name"], player["score"]))
+        if(i == 10):
+            break
+
 def game_over(msg):
     global score
+    print(msg)
     local_score = score
     new_msg = "Seu score foi de: {0}".format(str(score))
-    
-    print(msg)
-    msg = QMessageBox()
-    msg.setIcon(QMessageBox.Warning)
-    msg.setText("Here is example text")
-    msg.setWindowTitle("Game Over")
-    msg.setInformativeText("Here is example text!")
-    msg.setStandardButtons(QMessageBox.Ok)
-    msg.show()
-    time.sleep(4)
-    msg.hide()
+    insert_score(player_name, score)
+    print_top_10_scores()
+
+    # msg = QMessageBox()
+    # msg.setIcon(QMessageBox.Warning)
+    # msg.setText("Here is example text")
+    # msg.setWindowTitle("Game Over")
+    # msg.setInformativeText("Here is example text!")
+    # msg.setStandardButtons(QMessageBox.Ok)
+    # msg.show()
+    # time.sleep(4)
+    # msg.hide()
     exit()
 
 def self_colision():
