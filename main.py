@@ -15,28 +15,21 @@ config.read('config.txt')
 
 view_width: int = int(config['display']['width'])
 view_height: int = int(config['display']['height'])
-
 game_speed: int = int(config['game']['speed'])
 timeout_min: int = int(config['game']['timeout_min'])
 timeout_max: int = int(config['game']['timeout_max'])
-
-timeout: int = int(config['game']['timeout'])  # time for snake to eat apple
-
-# size of snake/apples
+timeout: int = int(config['game']['timeout'])  
 object_size: int = int(config['objects']['object_size'])
-# size of snake movement
 snake_move: float = float(config['objects']['snake_move'])
-# rate of adding new apple
 min_apples_rate: int = int(config['objects']['apples_rate_min'])
 max_apples_rate: int = int(config['objects']['apples_rate_max'])
 apples_rate: List = [min_apples_rate, max_apples_rate]
-# max apples in game at time
 apples_limit: int = int(config['objects']['apples_limit'])
 
 apples: List[Dict[str, float]] = list()
 apples_counter: int = random.randint(*apples_rate)
 
-snake: List[Dict[str, float]] = [{'x': 0.0, 'y': 0.0}]  # body of snake
+snake: List[Dict[str, float]] = [{'x': 0.0, 'y': 0.0}] 
 snake_dir: str = random.choice(['w', 's', 'd', 'a'])  
 will_snake_extend: bool = False
 
@@ -100,11 +93,11 @@ def draw_snake():
 
     # check whetever new head collide with some apple
     collided_apple = check_collision(x, y, apples)
+    score_label.setText("Quantidade de pontos: " + str(score))
     if (collided_apple is not None):
         will_snake_extend = True
         apples.remove(collided_apple)
         score += 1
-        score_label.setText("Quantidade de pontos: " + str(score))
 
     # if snake didn't eat apple remove tail
     if (not will_snake_extend):
@@ -163,7 +156,6 @@ def update_scene():
 
 
 class GameWidget(QOpenGLWidget):
-
     def initializeGL(self):
         self.setFixedSize(QSize(view_width, view_height))
         glViewport(0, 0, view_width, view_height)
@@ -172,7 +164,7 @@ class GameWidget(QOpenGLWidget):
         global apples_counter
 
         glClear(GL_COLOR_BUFFER_BIT)
-        glClearColor(0.0, 0.0, 0.0, 1.0)
+        glClearColor(0.59, 0.67, 0.60, 1.0)
         glPointSize(object_size)
 
         # check if should add new apple
@@ -188,14 +180,14 @@ class GameWidget(QOpenGLWidget):
         draw_apples()
 
         # draw snake
-        glColor3f(0.2, 0.9, 0.15)
+        glColor3f(0.0, 0.0, 0.0)
         draw_snake()
 
         glEnd()
 
 
 class MainWindow(QWidget):
-
+    
     def __init__(self, game_widget, score_label, timeout_label):
         super(MainWindow, self).__init__()
 
