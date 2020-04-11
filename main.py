@@ -3,7 +3,7 @@ import time
 import random
 import os
 import configparser
-from PySide2.QtWidgets import QHBoxLayout, QWidget, QApplication, QVBoxLayout,  QPushButton, QLabel, QMainWindow, QOpenGLWidget
+from PySide2.QtWidgets import QHBoxLayout, QWidget, QApplication, QVBoxLayout,  QPushButton, QLabel, QMainWindow, QOpenGLWidget, QMessageBox
 from PySide2.QtCore import *
 from PySide2.QtGui import *
 from OpenGL.GL import *
@@ -38,11 +38,76 @@ h_object_size: float = object_size/view_height
 
 score: int = 0
 
+class GameWidget(QOpenGLWidget):
+    def initializeGL(self):
+        self.setFixedSize(QSize(view_width, view_height))
+        glViewport(0, 0, view_width, view_height)
+
+    def paintGL(self):
+        global apples_counter
+
+        glClear(GL_COLOR_BUFFER_BIT)
+        glClearColor(0.59, 0.67, 0.60, 1.0)
+        glPointSize(object_size)
+
+        if (apples_counter <= 0 and len(apples) < apples_limit):
+            apples.append({'x': random.uniform(-1, 1),
+                           'y': random.uniform(-1, 1)})
+            apples_counter = random.randint(*apples_rate)
+
+        glBegin(GL_POINTS)
+
+        glColor3f(0.9, 0.2, 0.15) # apples
+        draw_apples()
+
+        glColor3f(0.0, 0.0, 0.0) # snake
+        draw_snake()
+
+        glEnd()
+
+
+class MainWindow(QWidget):
+    
+    def __init__(self, game_widget, score_label, timeout_label):
+        super(MainWindow, self).__init__()
+
+        self.game_widget = game_widget
+        self.score_label = score_label
+        self.timeout_label = timeout_label
+
+        hor_border: int = int(config['display']['hborder'])
+        ver_border: int = int(config['display']['vborder'])
+
+        self.setFixedSize(view_width + hor_border, view_height + ver_border)
+        self.setStyleSheet('background-color: #222222')
+        self.autoFillBackground()
+        self.initUI()
+
+    def initUI(self):
+        layout = QVBoxLayout()
+        layout.addWidget(self.score_label)
+        layout.addWidget(self.timeout_label)
+        layout.addWidget(self.game_widget)
+        self.setLayout(layout)
+        self.show()
+
+    def keyPressEvent(self, event):
+        global snake_dir
+        key: chr = chr(event.key()).lower()
+        control_keys: List = ['a', 'd', 'w', 's']
+
+        if (key in control_keys):
+            if (not (control_keys.index(snake_dir) < 2 and
+                     control_keys.index(key) < 2) and
+                not (control_keys.index(snake_dir) > 1 and
+                     control_keys.index(key) > 1)):
+                snake_dir = key
+
 def check_collision(snake_x, snake_y, objects):
     for obj in objects:
-        obj_x: Optional[float] = obj.get('x')
-        obj_y: Optional[float] = obj.get('y')
-        if isinstance(obj_x, float) and isinstance(obj_y, float):
+        obj_x = obj.get('x')
+        obj_y = obj.get('y')
+        if (isinstance(obj_x, float) and isinstance(obj_y, float)):
             x: float = obj_x
             y: float = obj_y
         else:
@@ -107,8 +172,16 @@ def draw_snake():
 
 def game_over(msg):
     print(msg)
+    msg = QMessageBox()
+    msg.setIcon(QMessageBox.Warning)
+    msg.setText("Here is example text")
+    msg.setWindowTitle("Game Over")
+    msg.setInformativeText("Here is example text!")
+    msg.setStandardButtons(QMessageBox.Ok)
+    msg.show()
+    time.sleep(4)
+    msg.hide()
     exit()
-    pass
 
 def self_colision():
     n = 0
@@ -142,95 +215,21 @@ def update_scene():
     game_widget.update()
 
 
-class GameWidget(QOpenGLWidget):
-    def initializeGL(self):
-        self.setFixedSize(QSize(view_width, view_height))
-        glViewport(0, 0, view_width, view_height)
-
-    def paintGL(self):
-        global apples_counter
-
-        glClear(GL_COLOR_BUFFER_BIT)
-        glClearColor(0.59, 0.67, 0.60, 1.0)
-        glPointSize(object_size)
-
-        # check if should add new apple
-        if (apples_counter <= 0 and len(apples) < apples_limit):
-            apples.append({'x': random.uniform(-1, 1),
-                           'y': random.uniform(-1, 1)})
-            apples_counter = random.randint(*apples_rate)
-
-        glBegin(GL_POINTS)
-
-        # draw apples
-        glColor3f(0.9, 0.2, 0.15)
-        draw_apples()
-
-        # draw snake
-        glColor3f(0.0, 0.0, 0.0)
-        draw_snake()
-
-        glEnd()
-
-
-class MainWindow(QWidget):
-    
-    def __init__(self, game_widget, score_label, timeout_label):
-        super(MainWindow, self).__init__()
-
-        self.game_widget = game_widget
-        self.score_label = score_label
-        self.timeout_label = timeout_label
-
-        hor_border: int = int(config['display']['hborder'])
-        ver_border: int = int(config['display']['vborder'])
-
-        self.setFixedSize(view_width + hor_border, view_height + ver_border)
-        self.setStyleSheet('background-color: #222222')
-        self.autoFillBackground()
-        self.initUI()
-
-    def initUI(self):
-        layout = QVBoxLayout()
-        layout.addWidget(self.score_label)
-        layout.addWidget(self.timeout_label)
-        layout.addWidget(self.game_widget)
-        self.setLayout(layout)
-
-        self.show()
-
-    def keyPressEvent(self, event):
-        global snake_dir
-        key: chr = chr(event.key()).lower()
-        control_keys: List = ['a', 'd', 'w', 's']
-
-        if (key in control_keys):
-            if (not (control_keys.index(snake_dir) < 2 and
-                     control_keys.index(key) < 2) and
-                not (control_keys.index(snake_dir) > 1 and
-                     control_keys.index(key) > 1)):
-                # if user change dir by 90 deg
-                snake_dir = key
 
 
 if __name__ == "__main__":
     app = QApplication([])
-
     opengl_widget = QOpenGLWidget()
     opengl_widget.setFocusPolicy(Qt.StrongFocus)
     game_widget = GameWidget(opengl_widget)
-
     score_label = QLabel()
     score_label.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
     score_label.setStyleSheet('color: white')
-
     timeout_label = QLabel()
     timeout_label.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
     timeout_label.setStyleSheet('color: white')
-
     main_window = MainWindow(game_widget, score_label, timeout_label)
 
-    # game updates
     timer = QTimer()
     timer.timeout.connect(update_scene)
     timer.start(100/game_speed)
