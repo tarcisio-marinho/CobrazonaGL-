@@ -11,11 +11,27 @@ from typing import *
 
 
 config = configparser.ConfigParser()
-config.read('config.txt')
-with open('scores.txt', 'r') as f:
-    arr = eval(f.read())
+try:
+    config.read('config.txt')
+    with open('scores.txt', 'r') as f:
+        arr = eval(f.read())
+except:
+    print("scores or configuration file was not found")
+    exit()
 
-top_players = {k: v for k, v in sorted(arr.items(), key=lambda item: item[1], reverse=True)}
+top_players = [{"name": k, "score": v} for k, v in sorted(arr.items(), key=lambda item: item[1], reverse=True)]
+top_scores = list()
+
+for player in top_players:
+    top_scores.append(player["score"])
+
+print(top_scores)
+
+# def is_top_score(score):
+#     for s in top_scores:
+#         if(score > s):
+            
+
 print(top_players)
 view_width = int(config['display']['width'])
 view_height = int(config['display']['height'])
