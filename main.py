@@ -9,6 +9,7 @@ from PySide2.QtGui import *
 from OpenGL.GL import *
 from typing import *
 import json, pickle
+import platform
 
 BLUE, RED, WHITE, YELLOW, MAGENTA, GREEN, END = '\33[94m', '\033[91m', '\33[97m', \
                                                  '\33[93m', '\033[1;35m', '\033[1;32m', \
@@ -25,9 +26,10 @@ except:
 
 player_name = input("Digite o nome do jogador: ")
 
+
+
 view_width = int(config['display']['width'])
 view_height = int(config['display']['height'])
-game_speed = int(config['game']['speed'])
 timeout_min = int(config['game']['timeout_min'])
 timeout_max = int(config['game']['timeout_max'])
 timeout = int(config['game']['timeout'])  
@@ -253,6 +255,30 @@ def update_scene():
 
 
 if __name__ == "__main__":
+    try:
+        dificuldade = int(input("Insira a dificuldade:\n1- Fácil\n2- Intermediário\n3- Difícil\n4- Impossível"))
+    except:
+        print("Digite apenas números, saindo.")
+        exit()
+        
+    game_speed = 2
+    if(dificuldade == 1):
+        game_speed = 2
+    elif(dificuldade == 2):
+        game_speed = 3
+    elif(dificuldade == 3):
+        game_speed = 4
+    elif(dificuldade == 4):
+        game_speed = 6
+    else:
+        print("Dificuldade: {0} inexistente, saindo.")
+        exit()
+
+    if(platform.system() == "Linux"):
+        os.system("clear")
+    else:
+        os.system("cls")
+        
     app = QApplication([])
     opengl_widget = QOpenGLWidget()
     opengl_widget.setFocusPolicy(Qt.StrongFocus)
