@@ -26,7 +26,29 @@ except:
 
 player_name = input("Digite o nome do jogador: ")
 
+try:
+    dificuldade = int(input("Insira a dificuldade:\n1- Fácil\n2- Intermediário\n3- Difícil\n4- Impossível: "))
+except:
+    print("Digite apenas números, saindo.")
+    exit()
+    
+game_speed = 2
+if(dificuldade == 1):
+    game_speed = 2
+elif(dificuldade == 2):
+    game_speed = 3
+elif(dificuldade == 3):
+    game_speed = 4
+elif(dificuldade == 4):
+    game_speed = 6
+else:
+    print("Dificuldade: {0} inexistente, saindo.")
+    exit()
 
+if(platform.system() == "Linux"):
+    os.system("clear")
+else:
+    os.system("cls")
 
 view_width = int(config['display']['width'])
 view_height = int(config['display']['height'])
@@ -161,7 +183,16 @@ def draw_snake():
     snake.append({'x': x, 'y': y})
 
     collided_apple = check_collision(x, y, apples)
-    score_label.setText("Quantidade de pontos: " + str(score))
+    if (game_speed == 2):
+        dif = "Fácil"
+    elif(game_speed == 3):
+        dif = "Intermediário"
+    elif(game_speed == 4):
+        dif = "Dificil"
+    elif(game_speed == 6):
+        dif = "Impossível"
+        
+    score_label.setText("Nome:{0}\nQuantidade de pontos: {1}\nDificuldade: {2}".format(player_name, score, dif))
     if (collided_apple is not None):
         will_snake_extend = True
         apples.remove(collided_apple)
@@ -255,29 +286,7 @@ def update_scene():
 
 
 if __name__ == "__main__":
-    try:
-        dificuldade = int(input("Insira a dificuldade:\n1- Fácil\n2- Intermediário\n3- Difícil\n4- Impossível: "))
-    except:
-        print("Digite apenas números, saindo.")
-        exit()
-        
-    game_speed = 2
-    if(dificuldade == 1):
-        game_speed = 2
-    elif(dificuldade == 2):
-        game_speed = 3
-    elif(dificuldade == 3):
-        game_speed = 4
-    elif(dificuldade == 4):
-        game_speed = 6
-    else:
-        print("Dificuldade: {0} inexistente, saindo.")
-        exit()
-
-    if(platform.system() == "Linux"):
-        os.system("clear")
-    else:
-        os.system("cls")
+    
         
     app = QApplication([])
     opengl_widget = QOpenGLWidget()
