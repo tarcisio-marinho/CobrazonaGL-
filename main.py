@@ -256,7 +256,7 @@ def update_scene():
 
 if __name__ == "__main__":
     try:
-        dificuldade = int(input("Insira a dificuldade:\n1- Fácil\n2- Intermediário\n3- Difícil\n4- Impossível"))
+        dificuldade = int(input("Insira a dificuldade:\n1- Fácil\n2- Intermediário\n3- Difícil\n4- Impossível: "))
     except:
         print("Digite apenas números, saindo.")
         exit()
