@@ -3,7 +3,6 @@
 Jogo da cobra mais desafiador com OpenGL
 
 
-<img href="">
 ![a.png](a.png)
 
 # Libs utilizadas:
