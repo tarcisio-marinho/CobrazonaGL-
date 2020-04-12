@@ -1,1 +1,1 @@
-[{'name': 'pele', 'score': 10}, {'name': 'buzu', 'score': 11}, {'name': 'tarcisio', 'score': 66}]
+[{'name': 'pele', 'score': 10}, {'name': 'joao', 'score': 9}, {'name': 'kleber', 'score': 5}, {'name': 'tarcisio', 'score': 3}, {'name': 'paulao', 'score': 6}, {'name': 'juao paulo', 'score': 1}, {'name': 'asda', 'score': 0}, {'name': 'asddsddd', 'score': 0}, {'name': 'asdddd', 'score': 0}, {'name': 'ggg', 'score': 0}, {'name': 'gggg', 'score': 10}, {'name': '444', 'score': 0}, {'name': '333', 'score': 0}, {'name': 'tarcisio', 'score': 8}, {'name': 'tarcisio', 'score': 12}]

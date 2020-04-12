@@ -10,6 +10,9 @@ from OpenGL.GL import *
 from typing import *
 import json, pickle
 
+BLUE, RED, WHITE, YELLOW, MAGENTA, GREEN, END = '\33[94m', '\033[91m', '\33[97m', \
+                                                 '\33[93m', '\033[1;35m', '\033[1;32m', \
+                                                  '\033[0m'
 
 config = configparser.ConfigParser()
 try:
@@ -187,16 +190,19 @@ def insert_score(name, score):
 
 def print_top_10_scores():
     global top_players
+    print("Pontuação:")
     ordered = sorted(top_players, key=lambda item: item['score'], reverse=True)
     for i, player in enumerate(ordered):
-        print('{0} -> {1} pontuação: {2}'.format(i+1, player["name"], player["score"]))
-        if(i == 10):
+        if(player['name'] == player_name and player['score'] == score):
+            print('{0}{1} -> {2} pontuação: {3}{4}'.format(RED, i+1, player["name"], player["score"], END))
+        else:
+            print('{0} -> {1} pontuação: {2}'.format(i+1, player["name"], player["score"]))
+        if(i == 9):
             break
 
 def game_over(msg):
     global score
     print(msg)
-    local_score = score
     new_msg = "Seu score foi de: {0}".format(str(score))
     insert_score(player_name, score)
     print_top_10_scores()
