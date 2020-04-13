@@ -182,7 +182,6 @@ def draw_snake():
     x, y = move_snake(x, y)
     snake.append({'x': x, 'y': y})
 
-    collided_apple = check_collision(x, y, apples)
     if (game_speed == 2):
         dif = "Fácil"
     elif(game_speed == 3):
@@ -191,8 +190,10 @@ def draw_snake():
         dif = "Dificil"
     elif(game_speed == 6):
         dif = "Impossível"
-        
+
     score_label.setText("Nome:{0}\nQuantidade de pontos: {1}\nDificuldade: {2}".format(player_name, score, dif))
+        
+    collided_apple = check_collision(x, y, apples)
     if (collided_apple is not None):
         will_snake_extend = True
         apples.remove(collided_apple)
@@ -204,7 +205,7 @@ def draw_snake():
         timeout += random.randint(timeout_min, timeout_max)
         will_snake_extend = False
 
-    for snake_body in snake:
+    for i, snake_body in enumerate(snake):
         sn_x = snake_body.get('x')
         sn_y = snake_body.get('y')
         if (isinstance(sn_x, float) and isinstance(sn_y, float)):
@@ -212,8 +213,14 @@ def draw_snake():
             y = sn_y
         else:
             raise ValueError
-
+        
+        # COR -> PIXEL
+        if(i == len(snake) -1 ):
+            glColor3f(0.3, 0.3, 0.3) 
+        else:
+            glColor3f(0.0, 0.0, 0.0) 
         glVertex2f(x, y)
+        
 
 def insert_score(name, score):
     global top_players
@@ -236,19 +243,9 @@ def print_top_10_scores():
 def game_over(msg):
     global score
     print(msg)
-    new_msg = "Seu score foi de: {0}".format(str(score))
     insert_score(player_name, score)
     print_top_10_scores()
 
-    # msg = QMessageBox()
-    # msg.setIcon(QMessageBox.Warning)
-    # msg.setText("Here is example text")
-    # msg.setWindowTitle("Game Over")
-    # msg.setInformativeText("Here is example text!")
-    # msg.setStandardButtons(QMessageBox.Ok)
-    # msg.show()
-    # time.sleep(4)
-    # msg.hide()
     exit()
 
 def self_colision():
