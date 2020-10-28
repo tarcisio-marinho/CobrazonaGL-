@@ -21,23 +21,24 @@ except:
     print("scores or configuration file was not found")
     exit()
 
-player_name = input("Digite o nome do jogador: ")
+PLAYER_NAME = input("Digite o nome do jogador: ")
 
 try:
-    dificuldade = int(input("Insira a dificuldade:\n1- Fácil\n2- Intermediário\n3- Difícil\n4- Impossível: "))
+    DIFICULDADE = int(input("Insira a dificuldade:\n1- Fácil\n2- Intermediário\n3- Difícil\n4- Impossível: \n"))
+    DIFICULDADE = int(input("Insira a dificuldade:\n1- Fácil\n2- Intermediário\n3- Difícil\n4- Impossível: \n"))
 except:
     print("Digite apenas números, saindo.")
     exit()
     
     #Game speed differs for each dificuldade.
 game_speed = 2
-if(dificuldade == 1):
+if(DIFICULDADE == 1):
     game_speed = 2
-elif(dificuldade == 2):
+elif(DIFICULDADE == 2):
     game_speed = 3
-elif(dificuldade == 3):
+elif(DIFICULDADE == 3):
     game_speed = 4
-elif(dificuldade == 4):
+elif(DIFICULDADE == 4):
     game_speed = 6
 else:
     print("Dificuldade: {0} inexistente, saindo.")
@@ -76,6 +77,7 @@ class GameWidget(QOpenGLWidget):
     def initializeGL(self):
         self.setFixedSize(QSize(view_width, view_height))
         glViewport(0, 0, view_width, view_height)
+
 
     def paintGL(self):
         global apples_counter
@@ -117,6 +119,7 @@ class MainWindow(QWidget):
         self.autoFillBackground()
         self.initUI()
 
+
     def initUI(self):
         layout = QVBoxLayout()
         layout.addWidget(self.score_label)
@@ -126,6 +129,7 @@ class MainWindow(QWidget):
         self.show()
 
     #Key press event, to move the snake.
+
     def keyPressEvent(self, event):
         global snake_dir
         key: chr = chr(event.key()).lower()
@@ -137,6 +141,7 @@ class MainWindow(QWidget):
                 not (control_keys.index(snake_dir) > 1 and
                      control_keys.index(key) > 1)):
                 snake_dir = key
+
 
 def check_collision(snake_x, snake_y, objects):
     for obj in objects:
@@ -153,9 +158,11 @@ def check_collision(snake_x, snake_y, objects):
             return obj
     return None
 
+
 def draw_apples():
     for apple in apples:
         glVertex2f(apple.get('x'), apple.get('y'))
+
 
 def move_snake(x: float, y: float):
         if (snake_dir == 'w'):
@@ -167,7 +174,8 @@ def move_snake(x: float, y: float):
         elif (snake_dir == 'd'):
             x += snake_move
         return [x, y]
-    
+
+
 def draw_snake():
     global will_snake_extend, timeout, score
 
@@ -190,7 +198,7 @@ def draw_snake():
     elif(game_speed == 6):
         dif = "Impossível"
 
-    score_label.setText("Nome:{0}\nQuantidade de pontos: {1}\nDificuldade: {2}".format(player_name, score, dif))
+    score_label.setText("Nome:{0}\nQuantidade de pontos: {1}\nDIFICULDADE: {2}".format(PLAYER_NAME, score, dif))
         
     collided_apple = check_collision(x, y, apples)
     if (collided_apple is not None):
@@ -227,22 +235,24 @@ def insert_score(name, score):
     with open('scores.txt', 'w') as f:
         f.write(str(top_players))
 
+
 def print_top_10_scores():
     global top_players
-    print("Pontuação:")
+    print("Pontuação: ")
     ordered = sorted(top_players, key=lambda item: item['score'], reverse=True)
     for i, player in enumerate(ordered):
-        if(player['name'] == player_name and player['score'] == score):
+        if(player['name'] == PLAYER_NAME and player['score'] == score):
             print('{0}{1} -> {2} pontuação: {3}{4}'.format(RED, i+1, player["name"], player["score"], END))
         else:
             print('{0} -> {1} pontuação: {2}'.format(i+1, player["name"], player["score"]))
         if(i == 9):
             break
 
+
 def game_over(msg):
     global score
     print(msg)
-    insert_score(player_name, score)
+    insert_score(PLAYER_NAME, score)
     print_top_10_scores()
 
     exit()
@@ -281,11 +291,8 @@ def update_scene():
     timeout_label.setText("Tempo restante: " + str(timeout))
     game_widget.update()
 
-
-
 #main class
 if __name__ == "__main__":
-    
         
     app = QApplication([])
     opengl_widget = QOpenGLWidget()
