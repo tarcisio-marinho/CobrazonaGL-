@@ -29,6 +29,7 @@ except:
     print("Digite apenas números, saindo.")
     exit()
     
+    #Game speed differs for each dificuldade.
 game_speed = 2
 if(dificuldade == 1):
     game_speed = 2
@@ -124,6 +125,7 @@ class MainWindow(QWidget):
         self.setLayout(layout)
         self.show()
 
+    #Key press event, to move the snake.
     def keyPressEvent(self, event):
         global snake_dir
         key: chr = chr(event.key()).lower()
