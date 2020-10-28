@@ -80,6 +80,7 @@ class GameWidget(QOpenGLWidget):
         self.setFixedSize(QSize(view_width, view_height))
         glViewport(0, 0, view_width, view_height)
 
+
     def paintGL(self):
         global apples_counter
 
@@ -120,6 +121,7 @@ class MainWindow(QWidget):
         self.autoFillBackground()
         self.initUI()
 
+
     def initUI(self):
         layout = QVBoxLayout()
         layout.addWidget(self.score_label)
@@ -127,6 +129,7 @@ class MainWindow(QWidget):
         layout.addWidget(self.game_widget)
         self.setLayout(layout)
         self.show()
+
 
     def keyPressEvent(self, event):
         global snake_dir
@@ -139,6 +142,7 @@ class MainWindow(QWidget):
                 not (control_keys.index(snake_dir) > 1 and
                      control_keys.index(key) > 1)):
                 snake_dir = key
+
 
 def check_collision(snake_x, snake_y, objects):
     for obj in objects:
@@ -155,9 +159,11 @@ def check_collision(snake_x, snake_y, objects):
             return obj
     return None
 
+
 def draw_apples():
     for apple in apples:
         glVertex2f(apple.get('x'), apple.get('y'))
+
 
 def move_snake(x: float, y: float):
         if (snake_dir == 'w'):
@@ -169,7 +175,8 @@ def move_snake(x: float, y: float):
         elif (snake_dir == 'd'):
             x += snake_move
         return [x, y]
-    
+
+
 def draw_snake():
     global will_snake_extend, timeout, score
 
@@ -229,6 +236,7 @@ def insert_score(name, score):
     with open('scores.txt', 'w') as f:
         f.write(str(top_players))
 
+
 def print_top_10_scores():
     global top_players
     print("Pontuação: ")
@@ -241,6 +249,7 @@ def print_top_10_scores():
         if(i == 9):
             break
 
+
 def game_over(msg):
     global score
     print(msg)
@@ -248,6 +257,7 @@ def game_over(msg):
     print_top_10_scores()
 
     exit()
+
 
 def self_colision():
     n = 0
@@ -258,10 +268,12 @@ def self_colision():
             return True    
     return False
 
+
 def out_of_screen():
     if(snake[0]['x'] > 1 or snake[0]['x'] < -1 or snake[0]['y'] > 1 or snake[0]['y'] < -1):
         return True
     return False
+
 
 def update_scene():
     global apples_counter, timeout
