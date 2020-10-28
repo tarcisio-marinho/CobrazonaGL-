@@ -27,7 +27,7 @@ except:
 player_name = input("Digite o nome do jogador: ")
 
 try:
-    dificuldade = int(input("Insira a dificuldade:\n1- Fácil\n2- Intermediário\n3- Difícil\n4- Impossível: "))
+    dificuldade = int(input("Insira a dificuldade:\n1- Fácil\n2- Intermediário\n3- Difícil\n4- Impossível: \n"))
 except:
     print("Digite apenas números, saindo.")
     exit()
@@ -230,7 +230,7 @@ def insert_score(name, score):
 
 def print_top_10_scores():
     global top_players
-    print("Pontuação:")
+    print("Pontuação: ")
     ordered = sorted(top_players, key=lambda item: item['score'], reverse=True)
     for i, player in enumerate(ordered):
         if(player['name'] == player_name and player['score'] == score):
@@ -280,10 +280,7 @@ def update_scene():
     game_widget.update()
 
 
-
-
 if __name__ == "__main__":
-    
         
     app = QApplication([])
     opengl_widget = QOpenGLWidget()
