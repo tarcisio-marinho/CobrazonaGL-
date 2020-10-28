@@ -163,7 +163,7 @@ def draw_apples():
     for apple in apples:
         glVertex2f(apple.get('x'), apple.get('y'))
 
-
+#Moving snake
 def move_snake(x: float, y: float):
         if (snake_dir == 'w'):
             y += snake_move
@@ -175,7 +175,7 @@ def move_snake(x: float, y: float):
             x += snake_move
         return [x, y]
 
-
+#Drawing snake
 def draw_snake():
     global will_snake_extend, timeout, score
 
@@ -228,14 +228,14 @@ def draw_snake():
             glColor3f(0.0, 0.0, 0.0) 
         glVertex2f(x, y)
         
-
+#Inserting score
 def insert_score(name, score):
     global top_players
     top_players.append({"name":name, "score":score})            
     with open('scores.txt', 'w') as f:
         f.write(str(top_players))
 
-
+# Printing top 10 scores
 def print_top_10_scores():
     global top_players
     print("Pontuação: ")
