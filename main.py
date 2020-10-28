@@ -30,6 +30,7 @@ except:
     print("Digite apenas números, saindo.")
     exit()
     
+    #Game speed differs for each dificuldade.
 game_speed = 2
 if(DIFICULDADE == 1):
     game_speed = 2
@@ -127,6 +128,7 @@ class MainWindow(QWidget):
         self.setLayout(layout)
         self.show()
 
+    #Key press event, to move the snake.
 
     def keyPressEvent(self, event):
         global snake_dir
@@ -255,7 +257,7 @@ def game_over(msg):
 
     exit()
 
-
+#Suicide
 def self_colision():
     n = 0
     for part in snake:
@@ -265,13 +267,13 @@ def self_colision():
             return True    
     return False
 
-
+#Out of screen
 def out_of_screen():
     if(snake[0]['x'] > 1 or snake[0]['x'] < -1 or snake[0]['y'] > 1 or snake[0]['y'] < -1):
         return True
     return False
 
-
+#Update cenas
 def update_scene():
     global apples_counter, timeout
     if(self_colision()):
@@ -289,7 +291,7 @@ def update_scene():
     timeout_label.setText("Tempo restante: " + str(timeout))
     game_widget.update()
 
-
+#main class
 if __name__ == "__main__":
         
     app = QApplication([])
