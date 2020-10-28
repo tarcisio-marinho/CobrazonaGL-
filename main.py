@@ -247,6 +247,7 @@ def game_over(msg):
 
     exit()
 
+#Suicide
 def self_colision():
     n = 0
     for part in snake:
@@ -256,11 +257,13 @@ def self_colision():
             return True    
     return False
 
+#Out of screen
 def out_of_screen():
     if(snake[0]['x'] > 1 or snake[0]['x'] < -1 or snake[0]['y'] > 1 or snake[0]['y'] < -1):
         return True
     return False
 
+#Update cenas
 def update_scene():
     global apples_counter, timeout
     if(self_colision()):
@@ -280,7 +283,7 @@ def update_scene():
 
 
 
-
+#main class
 if __name__ == "__main__":
     
         
